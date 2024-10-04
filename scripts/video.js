@@ -28,13 +28,22 @@ function categories(id) {
 
 buttonItems();
 
-const videoCategories = () => {
-  fetch("https://openapi.programming-hero.com/api/phero-tube/videos")
-    .then((res) => res.json())
-    .then((data) => videoItem(data.videos));
+const videoCategories = (searchText = '') => {
+  fetch(`https://openapi.programming-hero.com/api/phero-tube/videos?title=${searchText}`)
+  .then((res) => res.json())
+  .then((data) => videoItem(data.videos));
 };
 
 videoCategories();
+
+const inputText = document.getElementById('input-text');
+inputText.addEventListener('keyup', (e) => {
+
+  videoCategories(e.target.value);
+ 
+});
+
+
 
 function releasedTime(time) {
   const hours = parseInt(time / 3600);
@@ -46,6 +55,12 @@ function releasedTime(time) {
 
 const videoItem = (videos) => {
   videoContainer.innerHTML = "";
+
+  // document.getElementById('sort').addEventListener('click', () => {
+  //   videos.sort((a, b) => parseFloat(b.others.posted_date) - parseFloat(a.others.posted_date));
+  //   console.log(videos);
+  // });
+
   if (videos.length == 0) {
     videoContainer.innerHTML = `
         <div class='h-96 flex flex-col justify-center items-center'>
@@ -56,6 +71,8 @@ const videoItem = (videos) => {
   } else {
     videoContainer.classList.add("grid");
   }
+
+ 
 
   for (const video of videos) {
     videoContainer.innerHTML += `
@@ -98,3 +115,7 @@ const videoItem = (videos) => {
         `;
   }
 };
+
+
+
+
